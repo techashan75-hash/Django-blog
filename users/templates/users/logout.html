@@ -1,0 +1,12 @@
+<!-- templates/registration/logout.html -->
+{% extends "joel/base.html" %}
+
+{% block content %}
+<h2>Log Out</h2>
+<p>Are you sure you want to log out?</p>
+<form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger"type="submit">Log Out</button>
+</form>
+<a class="btn btn-outline-info sm"href="{% url 'home' %}">Cancel</a>
+{% endblock %}
