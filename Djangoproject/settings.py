@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from decouple import config
+import dj_database_url
 #from django.contrib.sites.models import Site
 
 #SITE_NAME = "Ashvath-blog"# Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,20 +28,11 @@ load_dotenv(BASE_DIR / '.env')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY ='django-insecure-o#)4^)&ss+qx5#(__)he8wi96$t-=8@y43k9^4n2vpz-m$h%&+'
-SECRET_KEY =os.getenv('SECRET_KEY')
+# SECURITY
+SECRET_KEY = config('SECRET_KEY')  # instead of os.getenv("SECRET_KEY")
+DEBUG = config('DEBUG', default=False, cast=bool)  # instead of os.getenv("DEBUG", "False") == "True"
+ALLOWED_HOSTS = ['*']  # for Vercel testing
 
-# SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG = os.getenv('DEBUG')== 'False'
-
-ALLOWED_HOSTS = [
-    '127.0.0.1',          # localhost (always keep)
-    '172.28.195.111',     # Termux mobile/LAN IP
-    '41.89.10.241',       # public IP
-]
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
@@ -88,11 +81,11 @@ WSGI_APPLICATION = 'Djangoproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# Database
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": dj_database_url.config(
+        default="sqlite:///db.sqlite3"  # fallback if DATABASE_URL not set
+    )
 }
 
 
@@ -128,9 +121,16 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
+# https://docs.djangoproject.com/en/6.0/howto/static-files
+STATIC_URL = '/static/'  # URL to access static files
 
-STATIC_URL = 'static/'
+# Folder where collectstatic will put static files for deployment
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Optional: extra static files locations (if you have custom static folders)
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, 'static'),
+#]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -154,3 +154,10 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 
 EMAIL_TIMEOUT=10
+
+
+
+
+
+
+
