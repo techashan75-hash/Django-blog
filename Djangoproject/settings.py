@@ -32,7 +32,11 @@ SECRET_KEY =os.getenv('SECRET_KEY')
 #DEBUG = True
 DEBUG = os.getenv('DEBUG')== 'False'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    '127.0.0.1',          # localhost (always keep)
+    '172.28.195.111',     # Termux mobile/LAN IP
+    '41.89.10.241',       # public IP
+]
 
 
 # Application definition
